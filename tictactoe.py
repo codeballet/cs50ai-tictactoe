@@ -52,6 +52,24 @@ def terminal(board):
     """
     raise NotImplementedError
 
+    # Check rows
+    for i in range(3):
+        row = []
+        for j in range(3):
+            row.append(board[i][j])
+        if row == ["X", "X", "X"] or row == ["O", "O", "O"]:
+            return True
+
+    # Check columns
+    for j in range(3):
+        column = []
+        for i in range(3):
+            column.append(board[i][j])
+        if column == ["X", "X", "X"] or column == ["O", "O", "O"]:
+            return True
+
+    # Check diagonals
+
 
 def utility(board):
     """
