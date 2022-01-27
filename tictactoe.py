@@ -44,8 +44,8 @@ def player(board):
     if xs != 0 and os != 0 and xs == os:
         return X
 
-    else:
-        raise Exception('Illegal move has been made!')
+    # else:
+    #     raise Exception('Illegal move has been made!')
 
 
 def actions(board):
@@ -79,7 +79,13 @@ def result(board, action):
         last_player = X
 
     # Add action of last player to board
-    board[action[0]][action[1]] = last_player
+    print(f'board: {board}')
+    i = action[0]
+    print(f'i: {i}')
+    j = action[1]
+    print(f'j: {j}')
+    board[i][j] = last_player
+    print(f'New board: {board}')
 
     return board
 
@@ -169,12 +175,12 @@ def minimax(board):
         return None
 
     # Get current player
-    player = player(board)
+    current_player = player(board)
 
     # Call max_value/min_value function for player
-    if player == X:
+    if current_player == X:
         return max_value(board)
-    elif player == O:
+    elif current_player == O:
         return min_value(board)
 
 
