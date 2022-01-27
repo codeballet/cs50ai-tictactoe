@@ -52,7 +52,18 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
-    raise NotImplementedError
+    # Possible actions are EMPTY tiles in the board
+    available = set()
+    i = 0
+    j = 0
+    for row in board:
+        for tile in row:
+            if tile == EMPTY:
+                available.add((i, j))
+            j += 1
+        i += 1
+
+    return available
 
 
 def result(board, action):
@@ -135,4 +146,5 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    if terminal(board):
+        return None
