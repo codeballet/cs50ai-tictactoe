@@ -22,7 +22,6 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
-
     # Check the number of X and O entries
     xs = 0
     os = 0
@@ -67,41 +66,59 @@ def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    raise NotImplementedError
-
-
-def terminal(board):
-    """
-    Returns True if game is over, False otherwise.
-    """
     # Check rows
     for i in range(3):
         row = []
         for j in range(3):
             row.append(board[i][j])
-        if row == ["X", "X", "X"] or row == ["O", "O", "O"]:
-            return True
+        if row == ["X", "X", "X"]:
+            return X
+        elif row == ["O", "O", "O"]:
+            return O
 
     # Check columns
     for j in range(3):
         column = []
         for i in range(3):
             column.append(board[i][j])
-        if column == ["X", "X", "X"] or column == ["O", "O", "O"]:
-            return True
+        if column == ["X", "X", "X"]:
+            return X
+        elif column == ["O", "O", "O"]:
+            return O
 
     # Check diagonals
     d1 = []
     for i in range(3):
         j = i
         d1.append(board[i][j])
-    if d1 == ["X", "X", "X"] or d1 == ["O", "O", "O"]:
-        return True
+    if d1 == ["X", "X", "X"]:
+        return X
+    elif d1 == ["O", "O", "O"]:
+        return O
 
     d2 = []
     for i, j in zip(range(3), range(2, -1, -1)):
         d2.append(board[i][j])
-    if d2 == ["X", "X", "X"] or d2 == ["O", "O", "O"]:
+    if d2 == ["X", "X", "X"]:
+        return X
+    elif d2 == ["O", "O", "O"]:
+        return O
+
+    # No winner
+    return None
+
+
+def terminal(board):
+    """
+    Returns True if game is over, False otherwise.
+    """
+    # If no EMPTY, game is over
+    game = []
+    for i in range(3):
+        for j in range(3):
+            game.append(board[i][j])
+
+    if EMPTY not in game:
         return True
 
     return False
