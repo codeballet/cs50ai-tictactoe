@@ -22,16 +22,16 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
-    raise NotImplementedError
 
     # Check the number of X and O entries
     xs = 0
     os = 0
-    for tile in board:
-        if tile == X:
-            xs += 1
-        elif tile == O:
-            os += 1
+    for row in board:
+        for tile in row:
+            if tile == X:
+                xs += 1
+            elif tile == O:
+                os += 1
 
     # If board is all EMPTY, return X
     if xs == 0 and os == 0:
@@ -44,6 +44,9 @@ def player(board):
     # If board has equal X to O, return X
     if xs != 0 and os != 0 and xs == os:
         return X
+
+    else:
+        raise Exception('Illegal move has been made!')
 
 
 def actions(board):
