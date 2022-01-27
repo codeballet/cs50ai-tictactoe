@@ -70,7 +70,18 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    raise NotImplementedError
+    # Find out who just played
+    last_player = None
+    next_player = player(board)
+    if next_player == X:
+        last_player = O
+    else:
+        last_player = X
+
+    # Add action of last player to board
+    board[action[0]][action[1]] = last_player
+
+    return board
 
 
 def winner(board):
