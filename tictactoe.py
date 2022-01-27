@@ -167,3 +167,36 @@ def minimax(board):
     """
     if terminal(board):
         return None
+
+    # Get current player
+    player = player(board)
+
+    # Call max_value/min_value function for player
+    if player == X:
+        return max_value(board)
+    elif player == O:
+        return min_value(board)
+
+
+def max_value(board):
+    # Return the max value
+    if terminal(board):
+        return utility(board)
+
+    v = -10
+    for action in actions(board):
+        v = max(v, min_value(result(board, action)))
+    
+    return v
+
+
+def min_value(board):
+    # Return the min value
+    if terminal(board):
+        return utility(board)
+    
+    v = 10
+    for action in actions(board):
+        v = min(v, max_value(result(board, action)))
+    
+    return v
