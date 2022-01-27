@@ -50,8 +50,6 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    raise NotImplementedError
-
     # Check rows
     for i in range(3):
         row = []
@@ -69,6 +67,20 @@ def terminal(board):
             return True
 
     # Check diagonals
+    d1 = []
+    for i in range(3):
+        j = i
+        d1.append(board[i][j])
+    if d1 == ["X", "X", "X"] or d1 == ["O", "O", "O"]:
+        return True
+
+    d2 = []
+    for i, j in zip(range(3), range(2, -1, -1)):
+        d2.append(board[i][j])
+    if d2 == ["X", "X", "X"] or d2 == ["O", "O", "O"]:
+        return True
+
+    return False
 
 
 def utility(board):
