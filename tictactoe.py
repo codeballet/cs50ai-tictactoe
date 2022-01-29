@@ -3,6 +3,10 @@ Tic Tac Toe Player
 """
 
 import math
+import random
+import sys
+sys.setrecursionlimit(10**2)
+print(f'Recursion limit: {sys.getrecursionlimit()}')
 
 X = "X"
 O = "O"
@@ -55,8 +59,8 @@ def actions(board):
     # Possible actions are EMPTY tiles in the board
     available = set()
     i = 0
-    j = 0
     for row in board:
+        j = 0
         for tile in row:
             if tile == EMPTY:
                 available.add((i, j))
@@ -70,22 +74,13 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    # Find out who just played
-    last_player = None
-    next_player = player(board)
-    if next_player == X:
-        last_player = O
-    else:
-        last_player = X
+    # Find out current player
+    current_player = player(board)
 
     # Add action of last player to board
-    print(f'board: {board}')
     i = action[0]
-    print(f'i: {i}')
     j = action[1]
-    print(f'j: {j}')
-    board[i][j] = last_player
-    print(f'New board: {board}')
+    board[i][j] = current_player
 
     return board
 
@@ -140,7 +135,13 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    # If no EMPTY, game is over
+    # Terminal if winner exists
+    winner_exists = winner(board)
+
+    if winner_exists == X or winner_exists == O:
+        return True
+
+    # Terminal if board is full
     game = []
     for i in range(3):
         for j in range(3):
@@ -149,6 +150,7 @@ def terminal(board):
     if EMPTY not in game:
         return True
 
+    # Otherwise, not terminal
     return False
 
 
@@ -157,12 +159,12 @@ def utility(board):
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
     # Identify winner
-    winner = winner(board)
+    get_winner = winner(board)
 
     # Return appropriate result
-    if winner == X:
+    if get_winner == X:
         return 1
-    elif winner == O:
+    elif get_winner == O:
         return -1
     return 0
 
@@ -171,38 +173,62 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
+    print(f'minimax board argument: {board}')
+    chosen_action = None
+
     if terminal(board):
         return None
 
-    # Get current player
-    current_player = player(board)
+    if board == initial_state():
+        return random.choice(tuple(actions(board)))
 
-    # Call max_value/min_value function for player
-    if current_player == X:
-        return max_value(board)
-    elif current_player == O:
-        return min_value(board)
+    print(f'player: {player(board)}')
+    if player(board) == X:
+        best_score = -math.inf
+        for action in actions(board):
+            v = min_value(result(board, action))
+            print(f'minimax X v: {v}')
+            if v > best_score:
+                best_score = v
+                chosen_action = action
+                print(f'minimax X chosen_action: {chosen_action}')
+        print(f'X player chosen_action: {chosen_action}')
+        return chosen_action
+    else: # Player is O
+        best_score = math.inf
+        for action in actions(board):
+            v = max_value(result(board, action))
+            print(f'minimax O v: {v}')
+            if v < best_score:
+                best_score = v
+                chosen_action = action
+                print(f'minimax O chosen_action: {chosen_action}')
+        print(f'O player chosen_action: {chosen_action}')
+        return chosen_action
 
 
 def max_value(board):
-    # Return the max value
+    print('Inside max_value')
     if terminal(board):
+        print('max_value terminal')
+        print(f'max_value utility: {utility(board)}')
         return utility(board)
 
-    v = -10
+    v = -math.inf
     for action in actions(board):
         v = max(v, min_value(result(board, action)))
-    
     return v
 
 
 def min_value(board):
-    # Return the min value
+    print('Inside min_value')
     if terminal(board):
+        print('min_value terminal')
+        print(f'min_value utility: {utility(board)}')
         return utility(board)
-    
-    v = 10
+
+    v = math.inf
     for action in actions(board):
         v = min(v, max_value(result(board, action)))
-    
+
     return v
