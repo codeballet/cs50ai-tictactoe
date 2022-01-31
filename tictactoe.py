@@ -2,11 +2,12 @@
 Tic Tac Toe Player
 """
 
+import copy
 import math
 import random
 import sys
-sys.setrecursionlimit(10**5)
-print(f'Recursion limit: {sys.getrecursionlimit()}')
+
+sys.setrecursionlimit(10**3)
 
 X = "X"
 O = "O"
@@ -56,18 +57,14 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
-    print('Inside actions')
     # Possible actions are EMPTY tiles in the board
     available = set()
-    print(f'Inside actions defined available set: {available}')
     i = 0
     for row in board:
         j = 0
         for tile in row:
             if tile == EMPTY:
-                print(f'Inside actions loop, print i, j: {i}, {j}')
                 available.add((i, j))
-                print(f'Inside actions, iteratively print available: {available}')
             j += 1
         i += 1
 
@@ -79,16 +76,19 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    print(f'Inside result, old board: {board}')
+    # Test if action is valid
+
+
     # Find out current player
     current_player = player(board)
 
-    new_board = board
+    # Make deep copy of board
+    new_board = copy.deepcopy(board)
+
     # Add action of last player to new_board
     i = action[0]
     j = action[1]
     new_board[i][j] = current_player
-    print(f'Inside result, new board: {new_board}')
 
     return new_board
 
@@ -143,10 +143,8 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    print('Inside terminal')
     # Terminal if winner exists
     winner_exists = winner(board)
-    print(f'Inside terminal winner_exists: {winner_exists}')
 
     if winner_exists == X or winner_exists == O:
         return True
@@ -158,11 +156,9 @@ def terminal(board):
             game.append(board[i][j])
 
     if EMPTY not in game:
-        print('Inside terminal, game is not EMPTY')
         return True
 
     # Otherwise, not terminal
-    print('Inside terminal, returning False')
     return False
 
 
@@ -185,7 +181,6 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    print(f'minimax board argument: {board}')
     chosen_action = None
 
     if terminal(board):
@@ -197,32 +192,23 @@ def minimax(board):
     if player(board) == X:
         best_score = -math.inf
         for action in actions(board):
-            print(f'minimax X player result board: {result(board, action)}')
             v = min_value(result(board, action))
-            print(f'minimax X v: {v}')
             if v > best_score:
                 best_score = v
                 chosen_action = action
-        print(f'X player chosen_action: {chosen_action}')
         return chosen_action
     else: # Player is O
         best_score = math.inf
         for action in actions(board):
-            print(f'minimax O player result board: {result(board, action)}')
             v = max_value(result(board, action))
-            print(f'minimax O v: {v}')
             if v < best_score:
                 best_score = v
                 chosen_action = action
-        print(f'O player chosen_action: {chosen_action}')
         return chosen_action
 
 
 def max_value(board):
-    print(f'Inside max_value, board: {board}')
     if terminal(board):
-        print('max_value terminal')
-        print(f'max_value utility: {utility(board)}')
         return utility(board)
 
     v = -math.inf
@@ -232,10 +218,7 @@ def max_value(board):
 
 
 def min_value(board):
-    print(f'Inside min_value, board: {board}')
     if terminal(board):
-        print('min_value terminal')
-        print(f'min_value utility: {utility(board)}')
         return utility(board)
 
     v = math.inf
