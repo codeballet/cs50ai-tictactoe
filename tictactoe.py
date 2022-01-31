@@ -42,15 +42,15 @@ def player(board):
         return X
 
     # If board has more X than O, return O
-    if xs > os:
+    elif xs > os:
         return O
 
     # If board has equal X to O, return X
-    if xs != 0 and os != 0 and xs == os:
+    elif xs != 0 and os != 0 and xs == os:
         return X
 
-    # else:
-    #     raise Exception('Illegal move has been made!')
+    else:
+        raise Exception('Cannot determine player')
 
 
 def actions(board):
@@ -175,7 +175,7 @@ def utility(board):
         return 1
     elif get_winner == O:
         return -1
-    return 0
+    return 0 # tie
 
 
 def minimax(board):
@@ -187,9 +187,11 @@ def minimax(board):
     if terminal(board):
         return None
 
+    # Initial move if AI is first player
     if board == initial_state():
         return random.choice(tuple(actions(board)))
 
+    # Find best move
     if player(board) == X:
         best_score = -math.inf
         for action in actions(board):
@@ -208,10 +210,13 @@ def minimax(board):
         return chosen_action
 
 
+# Recursive functions
 def max_value(board):
+    # Base case
     if terminal(board):
         return utility(board)
 
+    # Recursion
     v = -math.inf
     for action in actions(board):
         v = max(v, min_value(result(board, action)))
@@ -219,9 +224,11 @@ def max_value(board):
 
 
 def min_value(board):
+    # Base case
     if terminal(board):
         return utility(board)
 
+    # Recursion
     v = math.inf
     for action in actions(board):
         v = min(v, max_value(result(board, action)))
