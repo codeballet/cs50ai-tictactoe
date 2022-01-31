@@ -175,7 +175,8 @@ def utility(board):
         return 1
     elif get_winner == O:
         return -1
-    return 0 # tie
+    # tie
+    return 0
 
 
 def minimax(board):
@@ -200,7 +201,8 @@ def minimax(board):
                 best_score = v
                 chosen_action = action
         return chosen_action
-    else: # Player is O
+    else:
+        # Player is O
         best_score = math.inf
         for action in actions(board):
             v = max_value(result(board, action))
