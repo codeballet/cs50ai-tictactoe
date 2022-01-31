@@ -68,7 +68,6 @@ def actions(board):
             j += 1
         i += 1
 
-    print(f'Inside actions finished available: {available}')
     return available
 
 
@@ -77,7 +76,9 @@ def result(board, action):
     Returns the board that results from making move (i, j) on the board.
     """
     # Test if action is valid
-
+    valid_actions = actions(board)
+    if action not in valid_actions:
+        raise ValueError('Action is not valid')
 
     # Find out current player
     current_player = player(board)
